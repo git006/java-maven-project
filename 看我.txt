@@ -1,0 +1,24 @@
+这是maven项目，需先安装maven
+sudo apt install maven
+
+本地测试
+mvn test
+mvn clean package
+
+把项目跑起来
+java -jar target/maven-cicd-demo-1.0-SNAPSHOT.jar
+
+
+########## 全新安装依赖，编译，测试，打包 命令如下 =======
+mvn clean  #删除 代码之外的，以前构建生成的产物
+mvn compile #编译代码，并生成包目录 target
+mvn test  #安装依赖（如有必要），并 测试代码
+mvn package #安装依赖（如有必要），开始打包，并在target目录生成jar包
+===========
+还可以直接 mvn clean package
+
+====================
+下载的东西去哪了？（本地仓库）
+Maven 不会傻到每次都去互联网下载。所有下载下来的东西，都会被塞进你电脑本地的一个缓存目录，叫做 本地仓库（Local Repository）
+Linux / macOS 默认路径：~/.m2/repository/
+Windows 默认路径：C:\Users\用户名\.m2\repository\
