@@ -1,0 +1,12 @@
+# 忽略 Maven 编译和打包输出的 target 目录
+target/
+
+# 如果你使用的是 IntelliJ IDEA，建议顺便忽略这些 IDE 配置文件
+.idea/
+*.iml
+
+# 如果你使用的是 VS Code
+.settings/
+.project
+.classpath
+.factorypath
