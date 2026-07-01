@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17 # 明确指定使用 Java 17
+  pre_build:
+    commands:
+      - echo "Checking environment..."
+      - java -version
+      - ls -la
+  build:
+    commands:
+      - echo "Starting Maven Build..."
+      - mvn -B clean package
+  post_build:
+    commands:
+      - echo "Testing running the jar..."
+      - java -jar target/${APP_NAME}-1.0-SNAPSHOT.jar
+
+# (可选) 如果你希望把打包好的 Jar 传给下一个部署阶段，需要定义 artifacts
+artifacts:
+  files:
+    - target/*.jar
+  discard-paths: yes
