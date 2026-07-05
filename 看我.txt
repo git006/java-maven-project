@@ -7,6 +7,7 @@ mvn clean package
 
 把项目 本地 跑起来
 当上面mvn package完成后会在target目录下生成jar包
+
 java -jar target/maven-cicd-demo-1.0-SNAPSHOT.jar
 
 
