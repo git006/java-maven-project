@@ -9,7 +9,8 @@ cache:
 variables:
   # 改变 Maven 默认的本地仓库路径，使其能够被 GitLab CI 缓存
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  IMAGE_TAG: "192.168.122.1:5000/java-maven-project:${CI_COMMIT_SHORT_SHA}"
+  IMAGE_SERVER: "192.168.122.1:5000/java-maven-project"
+  IMAGE_TAG: "${CI_COMMIT_SHORT_SHA}"
 
 # 定义流水线的阶段
 stages:
@@ -46,12 +47,13 @@ docker_build:
   stage: docker_build
   image: docker:26.1.4-cli
   script:
-    - docker build -t ${IMAGE_TAG} .
-    - docker tag ${IMAGE_TAG} 192.168.122.1:5000/java-maven-project:latest
+    - docker build -t ${IMAGE_SERVER}:${IMAGE_TAG} .
+    - docker tag ${IMAGE_SERVER}:${IMAGE_TAG} ${IMAGE_SERVER}:latest
+
 
 docker_push:
   stage: docker_push
   image: docker:26.1.4-cli
   script:
-    - docker push ${IMAGE_TAG}
-    - docker push 192.168.122.1:5000/java-maven-project:latest
+    - docker push ${IMAGE_SERVER}:${IMAGE_TAG}
+    - docker push ${IMAGE_SERVER}:latest
