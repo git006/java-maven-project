@@ -9,11 +9,14 @@ cache:
 variables:
   # 改变 Maven 默认的本地仓库路径，使其能够被 GitLab CI 缓存
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  IMAGE_TAG: "192.168.122.1:5000/java-maven-project:${CI_COMMIT_SHORT_SHA}"
 
 # 定义流水线的阶段
 stages:
   - test
   - package
+  - docker_build
+  - docker_push
 
 # 阶段 1：运行自动化测试
 run_tests:
@@ -38,3 +41,15 @@ build_jar:
     paths:
       - target/*.jar
     expire_in: 1 week
+
+docker_build:
+  stage: docker_build
+  image: docker:26.1.4-cli
+  script:
+    - docker build -t . ${IMAGE_TAG}
+
+docker_push:
+  stage: docker_push
+  image: docker:26.1.4-cli
+  script:
+    - docker push ${IMAGE_TAG}
