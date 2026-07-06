@@ -1,0 +1,40 @@
+# 全局默认使用的 Docker 镜像，内置 Maven 和 JDK
+image: maven:3.9.6-eclipse-temurin-17
+
+# 定义缓存，避免每次构建都重新下载所有的 Maven 依赖包
+cache:
+  paths:
+    - .m2/repository
+
+variables:
+  # 改变 Maven 默认的本地仓库路径，使其能够被 GitLab CI 缓存
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+# 定义流水线的阶段
+stages:
+  - test
+  - package
+
+# 阶段 1：运行自动化测试
+run_tests:
+  stage: test
+  script:
+    - echo "开始执行 Maven 单元测试..."
+    - mvn clean test
+  # 收集测试报告（可选，GitLab 会在 UI 上直接展示测试结果）
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+# 阶段 2：编译并打成 Jar 包（可选，如果你只想测试，可以去掉这部分）
+build_jar:
+  stage: package
+  script:
+    - echo "测试通过，开始打包..."
+    - mvn package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
