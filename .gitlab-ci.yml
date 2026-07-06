@@ -46,10 +46,12 @@ docker_build:
   stage: docker_build
   image: docker:26.1.4-cli
   script:
-    - docker build -t . ${IMAGE_TAG}
+    - docker build -t ${IMAGE_TAG} .
+    - docker tag ${IMAGE_TAG} 192.168.122.1:5000/java-maven-project:latest
 
 docker_push:
   stage: docker_push
   image: docker:26.1.4-cli
   script:
     - docker push ${IMAGE_TAG}
+    - docker push 192.168.122.1:5000/java-maven-project:latest
